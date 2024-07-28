@@ -20,7 +20,7 @@ Install my-project with npm
   python -m venv venv
   source venv/bin/activate
   pip install poetry && poetry install
-  python app.py
+  python main.py
 ```
 The server will start running on http://localhost:5000/
 
