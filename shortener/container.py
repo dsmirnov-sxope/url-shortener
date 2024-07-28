@@ -14,7 +14,7 @@ from shortener.repositories.url import URLRepository
 from shortener.services.url import URLShortenerService
 
 
-class Container(containers.DeclarativeContainer):
+class Container(containers.DeclarativeContainer):  # pylint: disable=[too-few-public-methods]
     """
     Main container class.
     """
