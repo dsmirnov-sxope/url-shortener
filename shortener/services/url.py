@@ -6,7 +6,6 @@ import random
 import string
 from typing import TYPE_CHECKING
 
-from sqlalchemy import Column
 
 if TYPE_CHECKING:
     from shortener.repositories.url import URLRepository
@@ -21,7 +20,8 @@ class URLShortenerService:
         """
         Initializes the URLShortenerService with a URLRepository.
 
-        :param url_repository: Repository for managing URLs.
+        Args:
+            url_repository (URLRepository): Repository for managing URLs.
         """
         self.url_repository = url_repository
 
@@ -30,43 +30,56 @@ class URLShortenerService:
         """
         Generates a short URL.
 
-        :param length:  URL length. Default is 6.
-        :return: String representing shortened URL.
+        Args:
+            length (int, optional): URL length. Defaults to 6.
+
+        Returns:
+            str: String representing shortened URL.
         """
         characters = string.ascii_letters + string.digits
         short_url = "".join(random.choice(characters) for _ in range(length))
         return short_url
 
-    def shorten_url(self, original_url: str) -> str:
+    def shorten_url(
+        self,
+        original_url: str,
+        ttl: int = 60,
+    ) -> str:
         """
-        Shortens the given URL ands stores it in the database.
+        Shortens the given URL and stores it in the database.
 
-        :param original_url: String representing the original URL.
-        :return: String representing the shortened URL.
+        Args:
+            original_url (str): String representing the original URL.
+            ttl (int, optional): Time to live for the shortened URL. Defaults to 60 seconds.
+
+        Returns:
+            str: String representing the shortened URL.
         """
         existing_url = self.url_repository.get_url_by_original_url(
             original_url=original_url,
         )
         if existing_url:
-            return existing_url.short_url  # type: ignore[return-value]
+            return existing_url
         shorten_url = self.generate_short_url()
         self.url_repository.add_url(
             original_url=original_url,
             short_url=shorten_url,
+            ttl=ttl,
         )
         return shorten_url
 
     def resolve_url(
         self,
         short_url: str,
-    ) -> Column[str] | None:
+    ) -> str | None:
         """
         Resolves the shortened URL to its original URL.
 
-        :param short_url:  String representing the shortened URL.
-        :return: The original URL if found, otherwise None.
+        Args:
+            short_url (str): String representing the shortened URL.
+
+        Returns:
+            str | None: The original URL if found, otherwise None.
         """
         url = self.url_repository.get_url_by_short_url(short_url=short_url)
-        if url:
-            return url.original_url
-        return None
+        return url
