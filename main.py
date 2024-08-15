@@ -1,9 +1,14 @@
 """
 Main module for running the URL Shortener service.
 """
-from shortener.container import init_db
-from shortener.views import app
+
+from shortener.app import Application
+
+
+def run():
+    app = Application()
+    app.run(debug=True)
+
 
 if __name__ == "__main__":
-    init_db()
-    app.run(debug=True)
+    run()
