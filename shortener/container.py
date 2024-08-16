@@ -31,6 +31,11 @@ class Container(
 
 
 def create_container() -> Container:
+    """
+    Creates container for application.
+    Returns:
+        Container: Container instance.
+    """
     config_path = get_config_path()
     container = Container()
     container.config.from_yaml(config_path)

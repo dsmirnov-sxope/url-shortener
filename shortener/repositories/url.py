@@ -52,7 +52,8 @@ class URLRepository:
         Args:
             original_url (str): The original URL to add.
             short_url (str): The short URL to associate with the original URL.
-            ttl (int, optional): The time-to-live (TTL) for the URL mapping, in seconds. If not provided, the mapping will not expire.
+            ttl (int, optional): The time-to-live (TTL) for the URL mapping, in seconds.
+            If not provided, the mapping will not expire.
         """
         self.cache.set(
             key=f"original:{original_url}",

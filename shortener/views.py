@@ -1,7 +1,7 @@
 """
 URL Shortener endpoints.
 """
-
+# pylint: disable=[no-member]
 from typing import TYPE_CHECKING
 
 from dependency_injector.wiring import Provide, inject
@@ -22,7 +22,15 @@ container.init_resources()
 @inject
 def url_shortener_service(
     service: "URLShortenerService" = Provide["url_shortener_service"],
-):
+) -> "URLShortenerService":
+    """
+    Return a configured URL shortener service from container
+    Args:
+        service (URLShortenerService): URL shortener service. Injects automatically.
+
+    Returns:
+        URLShortenerService: Injected URL shortener service.
+    """
     return service
 
 

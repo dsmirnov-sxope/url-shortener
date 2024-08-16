@@ -1,3 +1,6 @@
+"""
+Redis client module.
+"""
 import pickle
 from typing import Any
 
@@ -5,6 +8,9 @@ from redis import Redis
 
 
 class RedisClient:
+    """
+    Simple wrapper around Redis.
+    """
     client: Redis
 
     def set(
@@ -19,7 +25,8 @@ class RedisClient:
         Args:
             key (str): The key to set.
             value (str): The value to associate with the key.
-            ttl (int | None, optional): The time-to-live (TTL) for the key-value pair, in seconds. If not provided, the key-value pair will not expire.
+            ttl (int | None, optional): The time-to-live (TTL) for the key-value pair,
+             in seconds. If not provided, the key-value pair will not expire.
 
         Returns:
             Any: The status code returned by Redis.
@@ -52,7 +59,8 @@ class RedisClient:
 
         Args:
             key (str): The key to set the TTL for.
-            ttl (int | None, optional): The TTL value in seconds. If not provided, the key will not expire.
+            ttl (int | None, optional): The TTL value in seconds.
+            If not provided, the key will not expire.
 
         Returns:
             int: 1 if the timeout was set, 0 if the key does not exist.

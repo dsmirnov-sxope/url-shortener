@@ -1,3 +1,7 @@
+"""
+Container for cache.
+"""
+# pylint: disable=[c-extension-no-member, unsubscriptable-object, too-few-public-methods]
 from dependency_injector import containers, providers
 from redis import Redis
 
@@ -6,6 +10,9 @@ from shortener.repositories.url import URLRepository
 
 
 class CacheContainer(containers.DeclarativeContainer):
+    """
+    Cache container.
+    """
     config = providers.Dependency()
 
     redis = providers.Singleton(
