@@ -1,6 +1,6 @@
 
 # URL Shortener
-A simple URL shortening service build with Python and Flask
+A simple URL shortening service build with Python, Flask and Redis
 
 
 
@@ -17,10 +17,7 @@ Install my-project with npm
 ```bash
   git clone https://github.com/dsmirnov-sxope/url-shortener.git
   cd url-shortener
-  python -m venv venv
-  source venv/bin/activate
-  pip install poetry && poetry install
-  python main.py
+  docker compose up -d
 ```
 The server will start running on http://localhost:5000/
 
