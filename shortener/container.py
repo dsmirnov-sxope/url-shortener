@@ -8,6 +8,7 @@ from dependency_injector import containers, providers
 from shortener.cache.container import CacheContainer
 from shortener.config import get_config_path
 from shortener.services.url import URLShortenerService
+from shortener.services.user import UserService
 
 
 class Container(
@@ -26,7 +27,17 @@ class Container(
 
     url_shortener_service: providers.Factory[URLShortenerService] = providers.Factory(
         URLShortenerService,
-        url_repository=cache_package.url_repo,
+    )
+
+    user_service: providers.Factory[UserService] = providers.Factory(
+        UserService,
+    )
+
+    url_shortener_service.add_attributes(
+        repo=cache_package.url_repo,
+    )
+    user_service.add_attributes(
+        repo=cache_package.user_repo,
     )
 
 

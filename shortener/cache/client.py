@@ -16,7 +16,7 @@ class RedisClient:
     def set(
         self,
         key: str,
-        value: str,
+        value: str | int,
         ttl: int | None = None,
     ) -> Any:
         """
@@ -24,8 +24,8 @@ class RedisClient:
 
         Args:
             key (str): The key to set.
-            value (str): The value to associate with the key.
-            ttl (int | None, optional): The time-to-live (TTL) for the key-value pair,
+            value (str | int): The value to associate with the key.
+            ttl (int, optional): The time-to-live (TTL) for the key-value pair,
              in seconds. If not provided, the key-value pair will not expire.
 
         Returns:
@@ -38,7 +38,7 @@ class RedisClient:
             ex=ttl,
         )
 
-    def get(self, key: str) -> str | None:
+    def get(self, key: str) -> str | int | None:
         """
         Retrieves the value associated with the specified key.
 
@@ -67,7 +67,7 @@ class RedisClient:
         """
         return self.client.expire(name=key, time=ttl)
 
-    def delete(self, key: str) -> int:
+    def delete(self, *keys: tuple[str]) -> int:
         """
         Removes the specified key.
 
@@ -77,4 +77,7 @@ class RedisClient:
         Returns:
             int: The number of keys that were removed.
         """
-        return self.client.delete(key)
+        return self.client.delete(*keys)
+
+    def increment(self, key):
+        return self.client.incr(name=key)

@@ -1,6 +1,9 @@
 """
 Application entry point.
 """
+import redis
+from flask_session import Session
+
 # pylint: disable=[too-few-public-methods]
 from shortener.container import create_container
 from shortener.views import app
@@ -12,7 +15,16 @@ class Application:
     """
     def __init__(self):
         self.container = create_container()
+        self.container.init_resources()
+        app.secret_key = 'default'
+        app.config['SESSION_TYPE'] = 'redis'
+        app.config['SESSION_PERMANENT'] = False
+        app.config['SESSION_USE_SIGNER'] = True
+        app.config['SESSION_KEY_PREFIX'] = 'session:'
+        app.config['SESSION_REDIS'] = redis.from_url('redis://redis:6379')
+        # TODO: configurate properly
         self.app = app
+        self.session = Session(app)
 
     def run(
         self,
