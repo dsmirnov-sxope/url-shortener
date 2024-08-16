@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "urlshort"
-version = "0.1.0"
+version = "0.2.1"
 description = ""
 authors = ["d.smirnov <d.smirnov+github@sxope.com>"]
 readme = "README.md"
