@@ -1,8 +1,15 @@
+"""
+Application entry point.
+"""
+# pylint: disable=[too-few-public-methods]
 from shortener.container import create_container
 from shortener.views import app
 
 
 class Application:
+    """
+    Application entry point.
+    """
     def __init__(self):
         self.container = create_container()
         self.app = app
