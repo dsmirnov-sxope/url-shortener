@@ -3,6 +3,7 @@ URL shortener service module.
 """
 
 import random
+import re
 import string
 from typing import TYPE_CHECKING
 
@@ -15,15 +16,7 @@ class URLShortenerService:
     """
     Service class for URL shortening and resolution.
     """
-
-    def __init__(self, url_repository: "URLRepository") -> None:
-        """
-        Initializes the URLShortenerService with a URLRepository.
-
-        Args:
-            url_repository (URLRepository): Repository for managing URLs.
-        """
-        self.url_repository = url_repository
+    repo: "URLRepository"
 
     @staticmethod
     def generate_short_url(length: int = 6) -> str:
@@ -55,13 +48,15 @@ class URLShortenerService:
         Returns:
             str: String representing the shortened URL.
         """
-        existing_url = self.url_repository.get_url_by_original_url(
+        if not self.validate_url(url=original_url):
+            raise ValueError("Invalid URL")
+        existing_url = self.repo.get_url_by_original_url(
             original_url=original_url,
         )
         if existing_url:
             return existing_url
         shorten_url = self.generate_short_url()
-        self.url_repository.add_url(
+        self.repo.add_url(
             original_url=original_url,
             short_url=shorten_url,
             ttl=ttl,
@@ -81,5 +76,26 @@ class URLShortenerService:
         Returns:
             str | None: The original URL if found, otherwise None.
         """
-        url = self.url_repository.get_url_by_short_url(short_url=short_url)
+        url = self.repo.get_url_by_short_url(short_url=short_url)
         return url
+
+    def validate_url(self, url: str) -> bool:
+        """
+        Checks if a string is a valid URL.
+
+        Args:
+            url (str): URL to check.
+
+        Returns:
+            bool: True if the URL is correct, False otherwise.
+        """
+        regex = re.compile(
+            r'^(?:http|ftp)s?://'
+            r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'
+            r'localhost|'
+            r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|'
+            r'\[?[A-F0-9]*:[A-F0-9:]+\]?)'
+            r'(?::\d+)?'
+            r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+        return re.match(regex, url) is not None

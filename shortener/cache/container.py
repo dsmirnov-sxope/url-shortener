@@ -7,6 +7,7 @@ from redis import Redis
 
 from shortener.cache.client import RedisClient
 from shortener.repositories.url import URLRepository
+from shortener.repositories.user import UserRepository
 
 
 class CacheContainer(containers.DeclarativeContainer):
@@ -37,6 +38,14 @@ class CacheContainer(containers.DeclarativeContainer):
         URLRepository,
     )
 
+    user_repo = providers.Singleton(
+        UserRepository,
+    )
+
     url_repo.add_attributes(
+        cache=client,
+    )
+
+    user_repo.add_attributes(
         cache=client,
     )
